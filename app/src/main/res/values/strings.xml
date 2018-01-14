@@ -8,6 +8,7 @@
     <string name="question_asia">Jezioro Bajkał to najstarsze i najgłębsze jezioro słodkowodne na świecie.</string>
     <string name="true_button">Prawda</string>
     <string name="false_button">Fałsz</string>
+    <string name="previous_button">Poprzednie</string>
     <string name="next_button">Następne</string>
     <string name="correct_toast">Poprawna odpowiedź!</string>
     <string name="incorrect_toast">Niepoprawna odpowiedź!</string>
