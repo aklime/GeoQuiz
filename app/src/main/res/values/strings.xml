@@ -12,4 +12,5 @@
     <string name="next_button">Następne</string>
     <string name="correct_toast">Poprawna odpowiedź!</string>
     <string name="incorrect_toast">Niepoprawna odpowiedź!</string>
+    <string name="score_toast">Udzielono %1$d%% poprawnych odpowiedzi.</string>>
 </resources>

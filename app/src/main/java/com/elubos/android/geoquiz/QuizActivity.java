@@ -9,6 +9,11 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+
 public class QuizActivity extends AppCompatActivity {
     private static final String TAG = "QuizActivity";
     private static final String KEY_INDEX = "index";
@@ -27,12 +32,16 @@ public class QuizActivity extends AppCompatActivity {
     };
 
     private int mCurrentIndex = 0;
+    private double mScore = 0.0;
+    private List<Boolean> mAnsweredQuestions = Arrays.asList(new Boolean[mQuestionBank.length]);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "Wywołanie metody: onCreate(Bundle)");
         setContentView(R.layout.activity_quiz);
+        Collections.fill(mAnsweredQuestions, Boolean.FALSE);
 
         if (savedInstanceState != null) {
             mCurrentIndex = savedInstanceState.getInt(KEY_INDEX, 0);
@@ -50,6 +59,8 @@ public class QuizActivity extends AppCompatActivity {
         mTrueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mAnsweredQuestions.set(mCurrentIndex, Boolean.TRUE);
+                setClicable();
                 checkAnswer(true);
             }
         });
@@ -57,6 +68,8 @@ public class QuizActivity extends AppCompatActivity {
         mFalseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mAnsweredQuestions.set(mCurrentIndex, Boolean.TRUE);
+                setClicable();
                 checkAnswer(false);
             }
         });
@@ -78,6 +91,16 @@ public class QuizActivity extends AppCompatActivity {
         });
         updateQuestion();
 
+    }
+
+    private void setClicable() {
+        if (mAnsweredQuestions.get(mCurrentIndex)) {
+            mTrueButton.setClickable(false);
+            mFalseButton.setClickable(false);
+        } else {
+            mTrueButton.setClickable(true);
+            mFalseButton.setClickable(true);
+        }
     }
 
     @Override
@@ -120,17 +143,28 @@ public class QuizActivity extends AppCompatActivity {
     private void updateQuestion() {
         int question = mQuestionBank[mCurrentIndex].getTextResId();
         mQuestionTextView.setText(question);
+        setClicable();
     }
+
 
     private void checkAnswer(boolean userPressedTrue) {
         boolean answerIsTrue = mQuestionBank[mCurrentIndex].isAnswerTrue();
         int messageResId;
+
         if (userPressedTrue == answerIsTrue) {
+            mScore += 1.0 / mQuestionBank.length;
             messageResId = R.string.correct_toast;
         } else {
             messageResId = R.string.incorrect_toast;
         }
+
         Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show();
+
+
+        if (!mAnsweredQuestions.contains(false)) {
+            mScore *= 100.0;
+            Toast.makeText(this, getResources().getString(R.string.score_toast, (int) mScore), Toast.LENGTH_LONG).show();
+        }
     }
 
 }
